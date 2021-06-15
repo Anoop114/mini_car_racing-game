@@ -5,11 +5,12 @@ using Photon.Pun;
 
 public class car_movment : MonoBehaviour
 {
-    // private Camera cam;
     [SerializeField] PhotonView my_photon_view;
     public Rigidbody rb;
     public Transform car;
-    public float speed;
+    public static float speed = 5f;
+    
+    public static int ongame;
 
     Vector3 forward = new Vector3(0, 0, 1);
     Vector3 backward = new Vector3(0, 0, -1);
@@ -17,43 +18,34 @@ public class car_movment : MonoBehaviour
     Vector3 rotationRight = new Vector3(0, 30, 0);
     Vector3 rotationLeft = new Vector3(0, -30, 0);
     private void Start() {
-        // cam = Camera.main;
         my_photon_view = GetComponent<PhotonView>();
-        // if(!my_photon_view.IsMine){
-        //     // Destroy(cam);
-        //     cam.enabled = false;
-        // }
-
-    }
-    private void Update() {
-        // rb.MovePosition(car.position + forward * speed * Time.deltaTime);
-        transform.Translate(forward * speed * Time.deltaTime);
     }
     void FixedUpdate()
     {
+        ongame = Start_game.ongame;
+        if(Stop_game.car_speed == 0f){
+            speed = Stop_game.car_speed;
+        }
+        if(ongame == 1){
+            transform.Translate(forward * speed * Time.deltaTime);
+        }
         if(my_photon_view.IsMine){
-            // if (Input.GetKey("w"))                                         
-            // {
-            //     rb.MovePosition(car.position + forward * speed * Time.deltaTime);
-            // }
-            // if (Input.GetKey("s"))
-            // {
-            //     rb.MovePosition(car.position  + backward * speed * Time.deltaTime);
-            // }
-
-            if (Input.GetKey("d")|| Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetKey("w")|| Input.GetKey(KeyCode.UpArrow)){
+                speed = 10f;
+            }else{
+                speed = 5f;
+            }
+            if (Input.GetKey("d")|| Input.GetKey(KeyCode.RightArrow))
             {
                 Quaternion deltaRotationRight = Quaternion.Euler(rotationRight * Time.deltaTime);
                 rb.MoveRotation(rb.rotation * deltaRotationRight);
             }
 
-            if (Input.GetKey("a") || Input.GetKey(KeyCode.RightArrow))
+            if (Input.GetKey("a") || Input.GetKey(KeyCode.LeftArrow))
             {
                 Quaternion deltaRotationLeft = Quaternion.Euler(rotationLeft * Time.deltaTime);
                 rb.MoveRotation(rb.rotation * deltaRotationLeft);
             }
         }
-        
-
     }
 }

@@ -16,6 +16,14 @@ public class create_and_join_rooms : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedRoom()
     {
+        // if (PhotonNetwork.playerList.Length == 2) {
+        //     PhotonNetwork.LoadLevel("Game");
+
+        // }
+        // else if (PhotonNetwork.playerList.Length == 1) {
+        //   Debug.Log ("Not Enough PLayers");
+        // //   popup.SetActive (true);
+        // }
         PhotonNetwork.LoadLevel("Game");
     }
 }
