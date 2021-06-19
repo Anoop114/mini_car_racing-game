@@ -6,6 +6,8 @@ using Photon.Pun;
 public class car_movment : MonoBehaviour
 {
     [SerializeField] PhotonView my_photon_view;
+    Camera cam;
+    camera_control cam1;
     public Rigidbody rb;
     public Transform car;
     public static float speed = 5f;
@@ -19,6 +21,9 @@ public class car_movment : MonoBehaviour
     Vector3 rotationLeft = new Vector3(0, -30, 0);
     private void Start() {
         my_photon_view = GetComponent<PhotonView>();
+        cam = Camera.main;
+        cam1 = cam.GetComponent<camera_control>();
+        cam1.enabled = true;
     }
     void FixedUpdate()
     {
