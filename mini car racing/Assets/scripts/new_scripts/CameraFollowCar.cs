@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Camera_follow_car : MonoBehaviour
+public class CameraFollowCar : MonoBehaviour
 {
     public Transform CarBody;
     public Vector3 offset;
