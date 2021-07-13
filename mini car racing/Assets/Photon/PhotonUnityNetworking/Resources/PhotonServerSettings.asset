@@ -41,6 +41,7 @@ MonoBehaviour:
   - start_game
   - start_gam
   - endgame_win
+  - SetupPlayersInScene
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
