@@ -21,16 +21,26 @@ public class RaceMonitor : MonoBehaviour
     {
         CameraFollowScript = Camera.GetComponent<CameraFollowCar>();
         ButtonEventScript = ButtonManager.GetComponent<ButtonEvent>();
-        if(PhotonNetwork.IsConnected)
+        if (PhotonNetwork.IsConnected)
         {
-            if(NetworkedPlayer.LocalPlayer == null)
+            if (NetworkedPlayer.LocalPlayer == null)
             {
-                StartPos = SpawnPoints[PhotonNetwork.CurrentRoom.PlayerCount-1].position;
-                StartRot = SpawnPoints[PhotonNetwork.CurrentRoom.PlayerCount-1].rotation;
-                GameObject Car = PhotonNetwork.Instantiate(CarPrefab[PhotonNetwork.CurrentRoom.PlayerCount-1].name,StartPos,StartRot,0);
-                CameraFollowScript.CarBody = Car; //setting car prefabs to other gameObjects so they easily find the car body.
-                ButtonEventScript.Car = Car;
-                
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    StartPos = SpawnPoints[0].position;
+                    StartRot = SpawnPoints[0].rotation;
+                    GameObject Car = PhotonNetwork.Instantiate(CarPrefab[0].name, StartPos, StartRot, 0);
+                    CameraFollowScript.CarBody = Car; //setting car prefabs to other gameObjects so they easily find the car body.
+                    ButtonEventScript.Car = Car;
+                }
+                else
+                {
+                    StartPos = SpawnPoints[PhotonNetwork.CurrentRoom.PlayerCount - 1].position;
+                    StartRot = SpawnPoints[PhotonNetwork.CurrentRoom.PlayerCount - 1].rotation;
+                    GameObject Car = PhotonNetwork.Instantiate(CarPrefab[PhotonNetwork.CurrentRoom.PlayerCount - 1].name, StartPos, StartRot, 0);
+                    CameraFollowScript.CarBody = Car; //setting car prefabs to other gameObjects so they easily find the car body.
+                    ButtonEventScript.Car = Car;
+                }
             }
         }
     }

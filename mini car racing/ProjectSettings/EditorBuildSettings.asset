@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Lobby.unity
     guid: 8dc00b2140732df46a5b1fcbeb9adbfd
   - enabled: 1
+    path: Assets/Scenes/WatingRoom.unity
+    guid: 609cecaf43c246e4aabe56389b9eb38c
+  - enabled: 1
     path: Assets/Scenes/Track1.unity
     guid: 6970d0080dcde504392e210ce461cb92
   m_configObjects: {}
