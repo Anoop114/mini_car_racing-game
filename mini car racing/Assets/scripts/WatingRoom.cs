@@ -9,7 +9,7 @@ using Photon.Realtime;
 
 public class WatingRoom : MonoBehaviourPunCallbacks
 {
-    private PhotonView MyPhotonView;
+    private PhotonView MyPhotonView; 
     private int PlayerCount;
     private int RoomSize;
     [SerializeField] private int MinPlayerToStart;
@@ -37,7 +37,7 @@ public class WatingRoom : MonoBehaviourPunCallbacks
     {
         PlayerCount = PhotonNetwork.PlayerList.Length;
         RoomSize = PhotonNetwork.CurrentRoom.MaxPlayers;
-        PlayerCountDisplay.text = PlayerCount+":"+RoomSize;
+        PlayerCountDisplay.text = "Player "+PlayerCount+":"+RoomSize +" Total";
         if(PlayerCount >= MinPlayerToStart)
         {
             ReadyToCountDown = true;
@@ -92,7 +92,7 @@ public class WatingRoom : MonoBehaviourPunCallbacks
         }
 
         string TempTimer = string.Format("{0:00}",TimerToStartGame);
-        TimerToStartDisplay.text = TempTimer;
+        TimerToStartDisplay.text = "Wating "+TempTimer+"s";
 
         if(TimerToStartGame <= 0f)
         {
