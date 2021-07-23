@@ -24,6 +24,8 @@ public class WatingRoom : MonoBehaviourPunCallbacks
     //CountDown Timer Reset
     [SerializeField] private float MaxWaitTime;
 
+    public GameObject JoinRoomPanel;
+    public GameObject WatingRoomPanel;
     private void Start() 
     {
         //initiallize variables
@@ -36,7 +38,13 @@ public class WatingRoom : MonoBehaviourPunCallbacks
     void PlayerCountUpdate()
     {
         PlayerCount = PhotonNetwork.PlayerList.Length;
-        RoomSize = PhotonNetwork.CurrentRoom.MaxPlayers;
+        if(PhotonNetwork.CurrentRoom == null)
+        {
+            RoomSize = 0;
+        }
+        else{
+            RoomSize = PhotonNetwork.CurrentRoom.MaxPlayers;
+        }
         PlayerCountDisplay.text = "Player "+PlayerCount+":"+RoomSize +" Total";
         if(PlayerCount >= MinPlayerToStart)
         {
@@ -53,7 +61,7 @@ public class WatingRoom : MonoBehaviourPunCallbacks
         PlayerCountUpdate();
         if(PhotonNetwork.IsMasterClient)
         {
-            MyPhotonView.RPC("RPCSendTimer", RpcTarget.Others, TimerToStartGame);
+            MyPhotonView.RPC("RPCSendTimer", RpcTarget.AllViaServer, TimerToStartGame);
         }
     }
     [PunRPC]
@@ -72,7 +80,8 @@ public class WatingRoom : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        WatingForMorePlayers();    
+        WatingForMorePlayers();  
+        PlayerCountUpdate();
     }
 
     void WatingForMorePlayers()
@@ -121,7 +130,11 @@ public class WatingRoom : MonoBehaviourPunCallbacks
     }
     public void CancelSearch()
     {
-        PhotonNetwork.LeaveRoom();
-        SceneManager.LoadScene("Lobby");
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+        JoinRoomPanel.SetActive(true);
+        WatingRoomPanel.SetActive(false);
     }
 }

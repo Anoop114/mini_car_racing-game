@@ -14,6 +14,11 @@ public class LaunchManager : MonoBehaviourPunCallbacks
     public TMP_Text FeedBack;
     public TMP_InputField PlayerName;
 
+    public GameObject JoinRoomPanel;
+    public GameObject WatingRoomPanel;
+
+    private readonly string connectionStatusMessage = "    Connection Status: ";
+
     void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
@@ -34,12 +39,12 @@ public class LaunchManager : MonoBehaviourPunCallbacks
         PhotonNetwork.NickName = PlayerName.text;
         if (PhotonNetwork.IsConnected)
         {
-            FeedBack.text += "\n Joining Room...";
+            FeedBack.text = connectionStatusMessage + PhotonNetwork.NetworkClientState;
             PhotonNetwork.JoinRandomRoom();
         }
         else
         {
-            FeedBack.text += "\n Connecting....";
+            FeedBack.text = connectionStatusMessage + PhotonNetwork.NetworkClientState;
             PhotonNetwork.GameVersion = GameVersion;
             PhotonNetwork.ConnectUsingSettings();
         }
@@ -50,36 +55,43 @@ public class LaunchManager : MonoBehaviourPunCallbacks
     {
         if (IsConnecting)
         {
-            FeedBack.text = "\n OnConnected To Master....";
+            FeedBack.text = connectionStatusMessage + PhotonNetwork.NetworkClientState;
             PhotonNetwork.JoinRandomRoom();
         }
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        FeedBack.text += "\n Failde to Join room";
+        FeedBack.text = connectionStatusMessage + PhotonNetwork.NetworkClientState;
         CreateRoom();
     }
     void CreateRoom()
     {
-        FeedBack.text += "\n Creating New Room";
-        int RandomRoomNumber = Random.Range(0,1000);
-        RoomOptions RoomOption = new RoomOptions() { IsVisible = true, IsOpen = true , MaxPlayers = this.MaxPlayerInRoom};
-        PhotonNetwork.CreateRoom("Room"+RandomRoomNumber,RoomOption);
+        FeedBack.text = connectionStatusMessage + PhotonNetwork.NetworkClientState;
+        int RandomRoomNumber = Random.Range(0, 1000);
+        RoomOptions RoomOption = new RoomOptions()
+        {
+            IsVisible = true,
+            IsOpen = true,
+            MaxPlayers = this.MaxPlayerInRoom,
+            PlayerTtl = 60000// 1 minuts.
+        };
+        PhotonNetwork.CreateRoom("Room" + RandomRoomNumber, RoomOption ,TypedLobby.Default);
     }
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        FeedBack.text += "\n Failed to create room... Trying again";
+        FeedBack.text = connectionStatusMessage + PhotonNetwork.NetworkClientState;
         CreateRoom();
     }
     public override void OnDisconnected(DisconnectCause cause)
     {
-        FeedBack.text += "\n Disconnected Because" + cause;
+        FeedBack.text = connectionStatusMessage + PhotonNetwork.NetworkClientState;
         IsConnecting = false;
     }
     public override void OnJoinedRoom()
     {
         FeedBack.text += "\n Join room with" + PhotonNetwork.CurrentRoom.PlayerCount + "players";
-        // PhotonNetwork.LoadLevel("Track1");
-        PhotonNetwork.LoadLevel("WatingRoom");
+        FeedBack.text = connectionStatusMessage + PhotonNetwork.NetworkClientState;
+        JoinRoomPanel.SetActive(false);
+        WatingRoomPanel.SetActive(true);
     }
 }

@@ -16,6 +16,7 @@ public class RaceMonitor : MonoBehaviour
     public Transform[] SpawnPoints;
     private Vector3 StartPos;
     private Quaternion StartRot;
+    GameObject Car;
     // Start is called before the first frame update
     void Awake()
     {
@@ -25,22 +26,21 @@ public class RaceMonitor : MonoBehaviour
         {
             if (NetworkedPlayer.LocalPlayer == null)
             {
+                
                 if (PhotonNetwork.IsMasterClient)
                 {
                     StartPos = SpawnPoints[0].position;
                     StartRot = SpawnPoints[0].rotation;
-                    GameObject Car = PhotonNetwork.Instantiate(CarPrefab[0].name, StartPos, StartRot, 0);
-                    CameraFollowScript.CarBody = Car; //setting car prefabs to other gameObjects so they easily find the car body.
-                    ButtonEventScript.Car = Car;
+                    Car = PhotonNetwork.Instantiate(CarPrefab[0].name, StartPos, StartRot, 0);
                 }
                 else
                 {
                     StartPos = SpawnPoints[PhotonNetwork.CurrentRoom.PlayerCount - 1].position;
                     StartRot = SpawnPoints[PhotonNetwork.CurrentRoom.PlayerCount - 1].rotation;
-                    GameObject Car = PhotonNetwork.Instantiate(CarPrefab[PhotonNetwork.CurrentRoom.PlayerCount - 1].name, StartPos, StartRot, 0);
-                    CameraFollowScript.CarBody = Car; //setting car prefabs to other gameObjects so they easily find the car body.
-                    ButtonEventScript.Car = Car;
+                    Car = PhotonNetwork.Instantiate(CarPrefab[PhotonNetwork.CurrentRoom.PlayerCount - 1].name, StartPos, StartRot, 0);
                 }
+                CameraFollowScript.CarBody = Car; //setting car prefabs to other gameObjects so they easily find the car body.
+                ButtonEventScript.Car = Car;
             }
         }
     }
